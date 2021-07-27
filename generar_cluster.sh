@@ -1,22 +1,13 @@
 #!/bin/bash
 
-docker ps -a | grep nodo1 > /dev/null
-content1=`echo $?`
-docker ps -a | grep nodo2 > /dev/null
-content2=`echo $?`
+for nodo in `docker ps | sed "s/  */ /g" | grep nodo | cut -d ' ' -f 14`; do
+docker stop $nodo
+docker rm $nodo
+done
 
-if [ $content1 -eq 0 ]; then
-docker stop nodo1
-docker rm nodo1
-fi
-
-if [ $content2 -eq 0 ]; then
-docker stop nodo2
-docker rm nodo2
-fi
-
-docker run -itd --net=prueba --name nodo1 --hostname nodo1 nodos
-docker run -itd --net=prueba --name nodo2 --hostname nodo2 nodos
-
-ssh-keygen -f "/home/jvela/.ssh/known_hosts" -R "nodo2"
-ssh-keygen -f "/home/jvela/.ssh/known_hosts" -R "nodo1"
+read -p "introcude el numero de nodos: " num
+for ((i=1; i<=$num; i++)); do
+    docker run -itd --net=prueba --name nodo$i --hostname nodo$i nodos
+    nodo="nodo"$i
+    ssh-keygen -f "/home/jvela/.ssh/known_hosts" -R "$nodo"
+done
