@@ -1,0 +1,13 @@
+version: '3'
+services: 
+    nodo1:
+        image: "nodos:latest"
+        net: prueba
+        name: nodo2
+        hostname: nodo2
+    nodo2:
+        image: "nodos:latest"
+        networks: 
+            net: prueba
+            name: nodo2
+            hostname: nodo2
