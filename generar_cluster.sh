@@ -1,8 +1,8 @@
 #!/bin/bash
 
 for nodo in `docker ps | sed "s/  */ /g" | grep nodo | cut -d ' ' -f 14`; do
-docker stop $nodo
-docker rm $nodo
+    docker stop $nodo
+    docker rm $nodo
 done
 
 read -p "introcude el numero de nodos: " num
